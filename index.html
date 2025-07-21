@@ -250,14 +250,18 @@
             </button>
             
             <!-- Botão Conectar (inicialmente oculto) -->
-            <div id="connectSection" class="hidden" style="text-align: center;">
-                <form action="$(link-login-only)" method="POST">
-                    <input type="hidden" name="redirurl" value="$(link-orig)">
-                    <button type="submit" class="btn btn-connect">
-                        <i class="fas fa-wifi"></i> CONECTAR À INTERNET
-                    </button>
-                </form>
-            </div>
+            <!-- Botão Conectar (inicialmente oculto) -->
+<div id="connectSection" class="hidden" style="text-align: center;">
+    <form action="http://10.0.0.101/goform/login" method="POST">
+        <input type="hidden" name="username" value="$(admin)">
+        <input type="hidden" name="password" value="$(M@ria123)">
+        <input type="hidden" name="dst" value="$(https://www.instagram.com/ABSTABACARIA)">
+        <input type="hidden" name="popup" value="true">
+        <button type="submit" class="btn btn-connect">
+            <i class="fas fa-wifi"></i> CONECTAR À INTERNET
+        </button>
+    </form>
+</div>
         </div>
 
         <!-- Informações da Loja -->
