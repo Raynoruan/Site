@@ -31,19 +31,22 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        /* Cabeçalho com gradiente reduzido */
         .header {
             background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-            padding: 25px;
+            padding: 15px;  /* Reduzi de 25px para 15px */
             text-align: center;
             position: relative;
         }
+        /* Ajuste no tamanho da logo para ficar proporcional */
         .logo {
-            max-width: 180px;
+            max-width: 120px;  /* Reduzi de 180px para 120px */
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
         }
+        /* Ajuste no título */
         h1 {
-            margin: 10px 0;
-            font-size: 1.8em;
+            margin: 8px 0;  /* Reduzi a margem */
+            font-size: 1.5em;  /* Reduzi de 1.8em para 1.5em */
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         .carousel {
@@ -195,23 +198,30 @@
                 min-width: 200px;
             }
             h1 {
-                font-size: 1.5em;
+                font-size: 1.3em;
             }
             .instagram-embed {
                 width: 100%;
+            }
+            .header {
+                padding: 12px;
+            }
+            .logo {
+                max-width: 100px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Cabeçalho com gradiente do Instagram -->
+        <!-- Cabeçalho com gradiente do Instagram (agora mais compacto) -->
         <div class="header">
             <img src="logo.png" alt="Abssolem Tabacaria" class="logo">
             <h1>Wi-Fi Premium</h1>
             <p>Aproveite nossa conexão e conheça nossos produtos!</p>
         </div>
 
+        <!-- [Restante do conteúdo permanece exatamente igual] -->
         <!-- Widget do Instagram Aprimorado -->
         <div class="instagram-widget">
             <h2><i class="fab fa-instagram"></i> Siga-nos no Instagram</h2>
@@ -278,6 +288,7 @@
     </div>
 
     <script>
+        // [O script permanece exatamente igual ao anterior]
         // Função para detectar se é mobile
         function isMobile() {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
