@@ -111,11 +111,11 @@
             transition: all 0.3s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             cursor: pointer;
+            border: none;
         }
         .btn-instagram {
             background: var(--cor-destaque);
             color: white;
-            border: none;
             font-size: 1em;
         }
         .btn-instagram:hover {
@@ -137,8 +137,6 @@
             color: white;
             font-size: 1.1em;
             padding: 15px 40px;
-            border: none;
-            cursor: pointer;
         }
         .btn-connect:hover {
             background: #3e8e41;
@@ -178,6 +176,20 @@
             gap: 15px;
             margin: 15px 0;
         }
+        /* Novos estilos adicionados */
+        .hidden {
+            display: none;
+        }
+        .thank-you-message {
+            color: #4CAF50;
+            margin: 15px 0;
+            font-weight: bold;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
         @media (max-width: 768px) {
             .carousel-item {
                 min-width: 200px;
@@ -199,7 +211,8 @@
             <h1>Wi-Fi Premium</h1>
             <p>Aproveite nossa conexão e conheça nossos produtos!</p>
         </div>
-  <!-- Widget do Instagram Aprimorado -->
+
+        <!-- Widget do Instagram Aprimorado -->
         <div class="instagram-widget">
             <h2><i class="fab fa-instagram"></i> Siga-nos no Instagram</h2>
             <p>Conheça nossos produtos e promoções!</p>
@@ -216,25 +229,36 @@
                 ></iframe>
             </div>
             
-            <!-- Botão de Seguir com Pop-up -->
-            <button id="follow-btn" class="btn btn-instagram">
+            <!-- Mensagem de agradecimento (inicialmente oculta) -->
+            <div id="thankYouMessage" class="hidden thank-you-message">
+                Obrigado por seguir a ABSTABACARIA! Agora você pode conectar à internet.
+            </div>
+            
+            <!-- Botão de Seguir (visível inicialmente) -->
+            <button id="followBtn" class="btn btn-instagram">
                 <i class="fab fa-instagram"></i> Seguir @ABSTABACARIA
             </button>
-           
             
-           
+            <!-- Botão Conectar (inicialmente oculto) -->
+            <div id="connectSection" class="hidden" style="text-align: center;">
+                <form action="$(link-login-only)" method="POST">
+                    <input type="hidden" name="redirurl" value="$(link-orig)">
+                    <button type="submit" class="btn btn-connect">
+                        <i class="fas fa-wifi"></i> CONECTAR À INTERNET
+                    </button>
+                </form>
+            </div>
         </div>
+
         <!-- Informações da Loja -->
         <div class="store-info">
-            <h2><i class="fas fa-store"></i>Nossa Loja</h2>
+            <h2><i class="fas fa-store"></i> Nossa Loja</h2>
             <p><i class="fas fa-map-marker-alt"></i> Rua Cosmos, 588</p>
             <p><i class="far fa-clock"></i> Ter-Dom: 10h-01h | Seg: Fechado</p>
             <a href="https://wa.me/5521986440075" class="btn btn-whatsapp">
                 <i class="fab fa-whatsapp"></i> Fale Conosco
             </a>
         </div>
-
-      
 
         <!-- Termos de Uso -->
         <div class="terms">
@@ -246,16 +270,6 @@
             </ul>
         </div>
 
-        <!-- Botão de Conexão -->
-        <div style="text-align: center; padding: 20px;">
-            <form action="$(link-login-only)" method="POST">
-                <input type="hidden" name="redirurl" value="$(link-orig)">
-                <button type="submit" class="btn btn-connect">
-                    <i class="fas fa-wifi"></i> CONECTAR À INTERNET
-                </button>
-            </form>
-        </div>
-
         <!-- Rodapé -->
         <div class="footer">
             <p>© 2024 Absolem Tabacaria | <a href="https://instagram.com/ABSTABACARIA" style="color: var(--cor-destaque);">@ABSTABACARIA</a></p>
@@ -264,30 +278,73 @@
     </div>
 
     <script>
-        // Botão de Seguir com Pop-up
-        document.getElementById('follow-btn').addEventListener('click', function() {
-            window.open(
-                'https://www.instagram.com/ABSTABACARIA/follow/',
-                'InstagramFollow',
-                'width=500,height=500,top=100,left=100'
-            );
+        // Função para detectar se é mobile
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Função para tentar abrir no app do Instagram
+        function openInstagram() {
+            // Tenta abrir no app primeiro
+            window.location.href = "instagram://user?username=ABSTABACARIA";
             
-            // Opcional: Mensagem de agradecimento
+            // Fallback para navegador se o app não abrir
             setTimeout(function() {
-                alert("Obrigado por seguir a ABSTABACARIA! Aproveite nosso Wi-Fi Premium.");
-            }, 1000);
+                if (!document.hidden) {
+                    window.open("https://www.instagram.com/ABSTABACARIA/follow/", "_blank");
+                }
+            }, 500);
+        }
+
+        // Botão de Seguir com troca para Conectar
+        document.getElementById('followBtn').addEventListener('click', function() {
+            if (isMobile()) {
+                openInstagram();
+            } else {
+                // Para desktop, abre em uma nova janela
+                const instagramWindow = window.open(
+                    'https://www.instagram.com/ABSTABACARIA/follow/',
+                    'InstagramFollow',
+                    'width=500,height=500,top=100,left=100'
+                );
+                
+                // Verifica se a janela foi bloqueada
+                setTimeout(() => {
+                    if (!instagramWindow || instagramWindow.closed || typeof instagramWindow.closed === 'undefined') {
+                        window.location.href = 'https://www.instagram.com/ABSTABACARIA/follow/';
+                    }
+                }, 200);
+            }
+            
+            // Mostra o botão de conectar após 3 segundos (considera que seguiu)
+            setTimeout(function() {
+                document.getElementById('followBtn').classList.add('hidden');
+                document.getElementById('thankYouMessage').classList.remove('hidden');
+                document.getElementById('connectSection').classList.remove('hidden');
+                
+                // Armazena no localStorage que já seguiu
+                localStorage.setItem('jaSeguiuABSTABACARIA', 'true');
+            }, 3000);
         });
+
+        // Verifica se já seguiu antes
+        if (localStorage.getItem('jaSeguiuABSTABACARIA') === 'true') {
+            document.getElementById('followBtn').classList.add('hidden');
+            document.getElementById('thankYouMessage').classList.remove('hidden');
+            document.getElementById('connectSection').classList.remove('hidden');
+        }
 
         // Atualizar contador de seguidores (simulado)
         function updateFollowerCount() {
             const countElement = document.querySelector('.follower-count');
-            let followers = 1200;
-            
-            // Simular aumento de seguidores (opcional)
-            setInterval(() => {
-                followers += Math.floor(Math.random() * 3);
-                countElement.textContent = `+${followers.toLocaleString()} seguidores`;
-            }, 60000); // Atualiza a cada 1 minuto
+            if (countElement) {
+                let followers = 1200;
+                
+                setInterval(() => {
+                    followers += Math.floor(Math.random() * 3);
+                    countElement.textContent = `+${followers.toLocaleString()} seguidores`;
+                }, 60000);
+            }
         }
         
         updateFollowerCount();
